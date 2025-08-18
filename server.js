@@ -35,6 +35,10 @@ app.use('/api/v1/uploadmedia', Uploadrouter);
 app.use('/api/v1/course', courserouter);
 app.use('/api/v1/coursepurchase', purchaserouter);
 
+
+
+app.get("/health", (req, res) => res.status(200).send("OK"));
+
 app.get('/', (req, res) => {
   res.send('Server is running!');
 });
