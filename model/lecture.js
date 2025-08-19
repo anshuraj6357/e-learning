@@ -1,8 +1,4 @@
 const mongoose=require('mongoose')
-
-
-
-
 const LectureSchema =new mongoose.Schema({
     lectureTitle:{
         type:String,
@@ -18,6 +14,4 @@ const LectureSchema =new mongoose.Schema({
         type:Boolean,
     }
    },{timestamps:true});
-
-
 module.exports = mongoose.model("lecture", LectureSchema);

@@ -103,6 +103,27 @@ const GetAallCourses = async (req, res) => {
     }
 }
 
+const GetAllpublishedcourse=async(req,res)=>{
+    try {
+        const allpublishedcourses=await Course.find({isPublished:true})
+        if(!allpublishedcourses){
+            return res.status(400).json({
+                success:false,
+                message:"no course published till now"
+            })
+        }
+        return res.status(200).json({
+            success:true,
+            message:"all the published courses are",
+            published:allpublishedcourses,
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success:false,
+            message:"unable to fetch the purchased courses"
+        })
+    }
+}
 
 const Editcourse = async (req, res) => {
     try {
@@ -310,16 +331,7 @@ const RemoveCoursed=async(req,res)=>{
 }
 
 
-const Getallpurchasedcourse=async(req,res)=>{
-    try {
-        const userId=req.id.id;
 
-        const allpurchasedcourse=await Course.findOne({})
-        
-    } catch (error) {
-        
-    }
-}
 
 const Getcourselecture = async (req, res) => {
     try {
@@ -388,6 +400,7 @@ module.exports = {
     Getcourselecture,
     PublishStateHandler,
     IsPublishedCourse,
+    GetAllpublishedcourse,
     Getcoursecreatordetai
 };
 

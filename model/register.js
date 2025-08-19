@@ -19,13 +19,20 @@ const SignupSchema = new mongoose.Schema({
     maxlength: 10,
   },
   Role:{
+    type: String,
     enum:["Student","Teacher"]
   },
   password: {
     type: String,
     required: true,
   },
- 
+  enrolledcourses:[
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"Course"
+    }
+  ],
+
  photourl: {
   type: String,
   required: false,   

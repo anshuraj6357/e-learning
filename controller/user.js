@@ -8,9 +8,9 @@ const { Uploadmedia, deletemedia } = require("../utils/cloudinary")
 
 const signupcontroller = async (req, res) => {
     console.log("req.body", req.body)
-    const { email, username, password, phonenumber } = req.body;
-    try {
-        if (!email || !username || !password || !phonenumber) {
+     try {
+          const { email, username, password, phonenumber,Role } = req.body;
+        if (!email || !username || !password || !phonenumber ||!Role) {
             return res.status(400).json({
                 success: false,
                 message: 'please filled all the data carefully'
@@ -45,24 +45,17 @@ const signupcontroller = async (req, res) => {
             username,
             phonenumber,
             password: hashedpassword,
+            Role:Role,
         })
+        console.log("user Created",User)
+
+   
+            await User.save();
     
+        console.log("user Created",User)
 
-        const newProfile = new Profile({
-            userid: User._id,          // ✅ make sure User is defined and fetched earlier
-            email: email,              // you can just use shorthand if variable name == key
-            username: username,
-            phonenumber: phonenumber,
-            password: password,        // ⚠️ don’t store plain passwords, always hash!
-            photourl: null,            // optional field
-            coursespurchased: [],      // initialize empty array
-        });
-
-        await newProfile.save();
-    await User.save();
-
-
-
+   
+ 
         return res.status(200).json({
             success: true,
             message: 'user registered successfully',
@@ -204,10 +197,7 @@ const GetUserProfile = async (req, res) => {
     try {
         const userid = req.id.id; // user ID extracted from request (e.g., JWT payload)
 
-        const profile = await Profile.find({userid:userid}).populate({
-            path:'enrolledcourses',
-            select:'_id CourseTitle CourseSubtitle Description CourseLevel CoursePrice CourseThumbnail'
-        });
+        const profile = await Signup.findById(userid).populate('enrolledcourses');
 
         console.log("profile", profile);
         if (!profile) {
@@ -243,7 +233,7 @@ const UpdateProfile = async (req, res) => {
         const photourlfirst = req.file;
 
 
-        const user = await Profile.findOne({ _id: userid });
+        const user = await Signup.findOne({ _id: userid });
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -288,35 +278,4 @@ const UpdateProfile = async (req, res) => {
         });
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = { signupcontroller, Logincontroller, Logoutcontroller, GetUserProfile, UpdateProfile };

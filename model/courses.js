@@ -51,10 +51,14 @@ const CourseSchem=new mongoose.Schema({
      type:mongoose.Schema.Types.ObjectId,
     ref:'CourseProg'
    },
+   enrolledcourses:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Course',
+    }],
    coursesold: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Purchase",
+        ref: "purchase",
       },
     ],
    },{timeStamps:true});
