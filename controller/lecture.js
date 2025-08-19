@@ -8,7 +8,7 @@ const { Uploadmedia, deletemedia } = require("../utils/cloudinary")
 const EditLectures = async (req, res) => {
     try {
         const { isPreview, lectureTitle, videoinfo } = req.body;
-        console.log("isPreview yahi hai ", isPreview);
+
         const { courseId, lectureId } = req.params;
 
         const foundlecture = await lecture.findById(lectureId);
@@ -18,9 +18,7 @@ const EditLectures = async (req, res) => {
         }
         foundlecture.isPreview = isPreview;
         if (videoinfo) {
-            console.log("videoinfo.videoUrl", videoinfo.secure_url)
-            console.log("videoinfo.publicid", videoinfo.public_id)
-            if (videoinfo.secure_url) foundlecture.videoUrl = videoinfo.secure_url;
+              if (videoinfo.secure_url) foundlecture.videoUrl = videoinfo.secure_url;
 
             if (videoinfo.public_id) foundlecture.publicid = videoinfo.public_id;
         }
@@ -41,7 +39,7 @@ const EditLectures = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error in fetching lectures", error);
+       
         return res.status(500).json({
             success: false,
             message: "unable to upload the lectures ",
@@ -69,7 +67,7 @@ const Getcoursebylecture = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error in fetching lectures", error);
+      
         return res.status(500).json({
             success: false,
             message: "unable to get lectures ",
@@ -99,7 +97,7 @@ const RemoveLectures = async (req, res) => {
             { Lectures: lectureId },
             { $pull: { Lectures: lectureId } }
         )
-        console.log("deleted successfully")
+    
         return res.status(200).json({
             success: true,
             message: 'lecture deleted successfully'
@@ -107,8 +105,7 @@ const RemoveLectures = async (req, res) => {
 
 
     } catch (error) {
-        console.log("Error in fetching all lectures", error);
-        return res.status(500).json({
+      return res.status(500).json({
             success: false,
             message: "unable to remove the lectures ",
         })

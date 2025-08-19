@@ -17,19 +17,19 @@ console.log("getcpdata triggered")
             path:'courseId',
             select:'Lectures'
         })
-        console.log("kya hua ",courseprogress)
+      
 
         if (!courseprogress) {
-            console.log("kuch nhi")
+        
           CourseProg.create({ userId, courseId })
         }
-          console.log("tikh hai")
+       
         return res.status(200).json({
             success: true,
             cp: courseprogress
         })
     } catch (error) {
-        console.error(error);
+    
         return res.status(500).json({ success: false, message: "Server error" });
     }
 };
@@ -38,8 +38,7 @@ const Updatecourseprogress = async (req, res) => {
         const { lectureId, courseId } = req.body;
         const userId = req.id.id;
 
-        console.log("lectureId", lectureId);
-        console.log("userId", courseId);
+       
 
         const foundCourse = await Course.findById(courseId).populate('Lectures');
         if (!foundCourse) return res.status(404).json({ success: false, message: "Course not found" });
@@ -48,9 +47,9 @@ const Updatecourseprogress = async (req, res) => {
 
 
         let courseProgress = await CourseProg.findOne({ userId, courseId }).populate('lectureProgress.lectureId');
-        console.log("courseProgress", courseProgress);
+     
         if (!courseProgress) {
-            console.log('gh')
+          
             courseProgress = new CourseProg({
                 userId,
                 courseId,
@@ -58,7 +57,7 @@ const Updatecourseprogress = async (req, res) => {
                 completed: false,
             });
         }
-        console.log(lectureId)
+     
 
 
         const lectureIndex = courseProgress.lectureProgress.findIndex(
@@ -66,9 +65,9 @@ const Updatecourseprogress = async (req, res) => {
         );
         if (lectureIndex === -1) {
             courseProgress.lectureProgress.push({ lectureId: lectureId, viewed: true });
-            console.log("lecture added")
+           
         } else {
-            console.log("lecture found")
+         
             courseProgress.lectureProgress[lectureIndex].viewed = true;
         }
 
@@ -79,17 +78,17 @@ const Updatecourseprogress = async (req, res) => {
 
         const mathsgot =
             ((courseProgress.lectureProgress.length / foundCourse.Lectures.length) * 100);
-        console.log("mathsgot", mathsgot)
+
         courseProgress.courseprogresscompleted = Math.floor(mathsgot)
         await courseProgress.save();
-        console.log("courseprogress", courseProgress)
+
         return res.status(200).json({
             success: true,
             progress: courseProgress,
         });
 
     } catch (error) {
-        console.error(error);
+     
         return res.status(500).json({ success: false, message: "Server error" });
     }
 };

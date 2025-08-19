@@ -11,12 +11,11 @@ const {
     Getcoursecreatordetai,
     RemoveCoursed,
     GetAllpublishedcourse,
+    Searchedcourses,
 } = require("../controller/course");
 const {Updatecourseprogress,Getcourseprogress}=require('../controller/courseprogress')
 
 
-
-console.log("createlecture",typeof RemoveCoursed)
 const { EditLectures, RemoveLectures,Getcoursebylecture }=require('../controller/lecture')
 
 
@@ -31,6 +30,7 @@ router.get('/coursecreatordetail/:userId',Validate,Getcoursecreatordetai)
 router.get('/courseprogress/:courseId',Validate,Getcourseprogress)
 router.post('/courseprogress/:courseId/:lectureId',Validate,Updatecourseprogress)
 router.delete('/deletecourse/:courseId',Validate,RemoveCoursed);
+router.get('/searchedcourse',Searchedcourses)
 
 //lectures   
 

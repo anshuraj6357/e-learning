@@ -7,8 +7,7 @@ const { Uploadmedia, deletemedia } = require("../utils/cloudinary")
 
 
 const signupcontroller = async (req, res) => {
-    console.log("req.body", req.body)
-     try {
+ try {
           const { email, username, password, phonenumber,Role } = req.body;
         if (!email || !username || !password || !phonenumber ||!Role) {
             return res.status(400).json({
@@ -31,7 +30,7 @@ const signupcontroller = async (req, res) => {
             hashedpassword = await bcrypt.hash(password, 10);
 
         } catch (error) {
-            console.log(error);
+       
             return res.status(500).json({
                 success: false,
                 message: " Internal server error while hashing the password"
@@ -47,13 +46,10 @@ const signupcontroller = async (req, res) => {
             password: hashedpassword,
             Role:Role,
         })
-        console.log("user Created",User)
-
-   
+      
             await User.save();
     
-        console.log("user Created",User)
-
+      
    
  
         return res.status(200).json({
@@ -64,7 +60,7 @@ const signupcontroller = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
+      
         res.status(500).json({
             success: false,
             message: "Internal sever error"
@@ -114,9 +110,7 @@ const Logincontroller = async (req, res) => {
                 message: "Incorrect password filled ",
             })
         }
-        console.log("login request recived:", existingUser);
-
-
+    
 
         const payload = {
             id: existingUser._id,
@@ -127,14 +121,12 @@ const Logincontroller = async (req, res) => {
         const token = jwt.sign(payload, process.env.jwt_secret, {
             expiresIn: "24h"
         })
-
-        console.log("Login successful:", token);
-        const options = {
+   const options = {
             path: "/",
             expires: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days
             httpOnly: true,
-            secure: true,      // HTTPS = true, Localhost = false
-            sameSite: "none"     // Use 'lax' for same-site localhost dev
+            secure: true,    
+            sameSite: "none"    
         };
 
         res.cookie("babbarCookie", token, options).status(200).json({
@@ -151,7 +143,7 @@ const Logincontroller = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error);
+     
         return res.status(500).json({
             success: false,
             message: "internal server error",
@@ -164,14 +156,12 @@ const Logincontroller = async (req, res) => {
 
 const Logoutcontroller = async (req, res) => {
     try {
-        console.log("logout trigger");
+   
         res.clearCookie('babbarCookie', {
             httpOnly: true,
             sameSite: 'strict',
             path: '/', // if used during set
         });
-
-        console.log("logoutsuccessful", req.id)
 
 
         return res.status(200).json({
@@ -183,7 +173,7 @@ const Logoutcontroller = async (req, res) => {
 
 
     } catch (error) {
-        console.log("error incxhbj logout", error)
+    
         return res.status(500).json({
             success: false,
             message: "error in while getting logout"
@@ -199,16 +189,12 @@ const GetUserProfile = async (req, res) => {
 
         const profile = await Signup.findById(userid).populate('enrolledcourses');
 
-        console.log("profile", profile);
         if (!profile) {
-            console.log("not getting the profile", profile)
-            return res.status(404).json({
+    return res.status(404).json({
                 success: false,
                   message: "User profile not found",
             });
         }
-
-        console.log("profile");
 
         return res.status(200).json({
             success: true,
@@ -216,8 +202,7 @@ const GetUserProfile = async (req, res) => {
             profile,
         });
     } catch (error) {
-        console.log("Error in getting profile", error);
-        return res.status(500).json({
+           return res.status(500).json({
             success: false,
             message: "Error occurred while fetching profile",
         });
@@ -226,8 +211,7 @@ const GetUserProfile = async (req, res) => {
 
 
 const UpdateProfile = async (req, res) => {
-    console.log("req.body", req.body)
-    try {
+       try {
         const userid = req.id.id;
         const { username } = req.body;
         const photourlfirst = req.file;
@@ -241,38 +225,30 @@ const UpdateProfile = async (req, res) => {
             });
         }
 
-
-        // Delete the old file from Cloudinary if photourl exists
-        if (user.photourl) {
+   if (user.photourl) {
             const publicuid = user.photourl.split('/').pop().split('.')[0];
-            deletemedia(publicuid); // make sure deletemedia handles errors gracefully
+            deletemedia(publicuid); 
         }
 
         let updatedata = { username };
 
-
-
-        // If a new photo is uploaded, upload to cloudinary and update photourl
-        if (photourlfirst) {
+       if (photourlfirst) {
             const cloudresponse = await Uploadmedia(photourlfirst.path);
             updatedata.photourl = cloudresponse.secure_url;
             updatedata.url = cloudresponse.url;
-            console.log("Uploaded to Cloudinary URL:", updatedata.photourl);
-        }
+             }
 
 
 
         const updateuser = await Signup.findByIdAndUpdate({ _id: userid }, updatedata, { new: true }).select("-password");
-        console.log("updateuser", updateuser)
-        return res.status(200).json({
+            return res.status(200).json({
             success: true,
             message: "Data updated successfully",
             user: updateuser,
         });
 
     } catch (error) {
-        console.log("Error in updating profile", error);
-        return res.status(500).json({
+            return res.status(500).json({
             success: false,
             message: "Error occurred while updating profile",
         });

@@ -16,7 +16,6 @@ mongodb.connect();
 
 app.use(cookieParser());
 
-// ✅ Stripe webhook must come before body-parsing middleware
 
 app.use('/api/v1/coursepurchase', webhookattach);
 // Now parse JSON for all other routes
@@ -30,14 +29,6 @@ app.use(
   })
 );
 
-// app.use(
-//   cors({
-//     origin: "https://e-learning-student-pwiq-s2tzyhpyb-anshu-rajs-projects-92c5d5d7.vercel.app",
-//     credentials: true,
-//   })
-// );
-
-
 
 app.use('/api/v1/user', userrouter);
 app.use('/api/v1/uploadmedia', Uploadrouter);
@@ -46,7 +37,6 @@ app.use('/api/v1/coursepurchase', purchaserouter);
 
 
 
-app.get("/health", (req, res) => res.status(200).send("OK"));
 
 app.get('/', (req, res) => {
   res.send('Server is running!');

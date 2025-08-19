@@ -26,19 +26,16 @@ const Validate = async (req, res, next) => {
     req.id = decoded;    
     next();
   }catch (error) {
-    console.log("JWT Error:", error);
-
+  
     if (error.name === "TokenExpiredError") {
-      console.log("JWT TokenExpiredError:");
-      return res.status(401).json({
+         return res.status(401).json({
         success: false,
         message: "Token expired, please login again",
       });
     }
 
     if (error.name === "JsonWebTokenError") {
-       console.log("JWT JsonWebTokenError:");
-      return res.status(403).json({
+         return res.status(403).json({
         success: false,
         message: "Invalid token",
       });

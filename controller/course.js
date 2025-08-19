@@ -7,7 +7,6 @@ const CourseControlller = async (req, res) => {
     try {
 
         const { CourseTitle, Category } = req.body;
-        console.log(Category);
 
         if (!CourseTitle || !Category) {
             return res.status(401).json({
@@ -30,7 +29,7 @@ const CourseControlller = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error in creating the course", error);
+
         return res.status(500).json({
             success: false,
             message: "course created failed",
@@ -44,8 +43,8 @@ const Getcoursecreatordetai = async (req, res) => {
     try {
 
         const { userId } = req.params;
-      
-    
+
+
 
         const user = await Profile.findOne({ userid: userId }).populate("userid")
 
@@ -55,14 +54,17 @@ const Getcoursecreatordetai = async (req, res) => {
                 mesage: "not able to find the user "
             })
         }
-      
+
         return res.status(200).json({
             success: true,
             userdetail: user.userid
         })
 
     } catch (error) {
-        console.log(error)
+        return res.status(500).json({
+            success: false,
+            mesage: 'internal server erroe'
+        })
 
     }
 
@@ -84,8 +86,6 @@ const GetAallCourses = async (req, res) => {
                 })
         }
 
-        // console.log("courses", courses);
-
         return res.status(200).json({
             success: true,
             message: "course fetched successfully",
@@ -94,7 +94,6 @@ const GetAallCourses = async (req, res) => {
 
 
     } catch (error) {
-        console.log("Error in fetching the user course", error);
         return res.status(500).json({
             success: false,
             message: "course fetched failed",
@@ -103,24 +102,24 @@ const GetAallCourses = async (req, res) => {
     }
 }
 
-const GetAllpublishedcourse=async(req,res)=>{
+const GetAllpublishedcourse = async (req, res) => {
     try {
-        const allpublishedcourses=await Course.find({isPublished:true})
-        if(!allpublishedcourses){
+        const allpublishedcourses = await Course.find({ isPublished: true })
+        if (!allpublishedcourses) {
             return res.status(400).json({
-                success:false,
-                message:"no course published till now"
+                success: false,
+                message: "no course published till now"
             })
         }
         return res.status(200).json({
-            success:true,
-            message:"all the published courses are",
-            published:allpublishedcourses,
+            success: true,
+            message: "all the published courses are",
+            published: allpublishedcourses,
         })
     } catch (error) {
         return res.status(500).json({
-            success:false,
-            message:"unable to fetch the purchased courses"
+            success: false,
+            message: "unable to fetch the purchased courses"
         })
     }
 }
@@ -128,8 +127,7 @@ const GetAllpublishedcourse=async(req,res)=>{
 const Editcourse = async (req, res) => {
     try {
         const courseid = req.params.courseId;
-        console.log("req.params.courseId", req.params.courseId);
-        console.log("req.body", req.body)
+
         const {
             CourseTitle,
             CourseSubtitle,
@@ -167,7 +165,7 @@ const Editcourse = async (req, res) => {
         if (coursefound.CourseThumbnail) {
             const publicid = coursefound.CourseThumbnail.split('/').pop().split('.')[0];
             await deletemedia(publicid);
-            console.log("deleted successfully")
+
         }
         if (Thumbnail) {
             const file = Thumbnail.path;
@@ -185,7 +183,7 @@ const Editcourse = async (req, res) => {
 
 
     } catch (error) {
-        console.log("Error in fetching the user course", error);
+
         return res.status(500).json({
             success: false,
             message: "course updation failed,try again",
@@ -200,7 +198,7 @@ const PublishStateHandler = async (req, res) => {
         const { courseId } = req.params
 
         const { publish } = req.query;
-      
+
         const foundcourse = await Course.findById(courseId);
         if (publish === "true") {
             foundcourse.isPublished = true;
@@ -209,10 +207,10 @@ const PublishStateHandler = async (req, res) => {
             foundcourse.isPublished = false;
         }
 
-      
+
 
         await foundcourse.save();
-      
+
         return res.status(200).json({
             success: true,
             message: `Course is now ${foundcourse.isPublished ? 'published' : 'unpublished'}`,
@@ -220,7 +218,6 @@ const PublishStateHandler = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("unable to published the course", error);
         return res.status(500).json({
             success: false,
             message: "unable to published the course course,try again later ",
@@ -244,7 +241,7 @@ const GetCourse = async (req, res) => {
                 message: "course not found"
             })
         }
- 
+
         return res.status(200).json({
             success: true,
             message: "Course fetched successfully",
@@ -252,8 +249,7 @@ const GetCourse = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error in fetching the user course", error);
-        return res.status(500).json({
+     return res.status(500).json({
             success: false,
             message: "unable to load course,try again later ",
         })
@@ -265,7 +261,7 @@ const Createlectures = async (req, res) => {
     try {
         const lectureTitle = req.body.lectureTitle;
         const courseid = req.params.courseId;
-      
+
         if (!lectureTitle) {
             return res.status(400).json({
                 success: false,
@@ -274,8 +270,7 @@ const Createlectures = async (req, res) => {
         }
         const lecturecreated = await lecture.create({ lectureTitle: lectureTitle })
         const foundcourse = await Course.findById(courseid);
-        console.log('foundcourse', foundcourse)
-
+       
         if (!foundcourse) {
             return res.status(400).json({
                 success: false,
@@ -295,7 +290,7 @@ const Createlectures = async (req, res) => {
             message: "lecture created successfully",
         })
     } catch (error) {
-        console.log("Error in uploading the lectures", error);
+     
         return res.status(500).json({
             success: false,
             message: "unable to upload the lectures ",
@@ -304,43 +299,38 @@ const Createlectures = async (req, res) => {
     }
 }
 
-const RemoveCoursed=async(req,res)=>{
+const RemoveCoursed = async (req, res) => {
     try {
-        console.log("trigger1")
-        const {courseId}=req.params;
-         console.log("trigger1",courseId)
-        const course=await Course.findByIdAndDelete(courseId);
-        if(!course){
+      
+        const { courseId } = req.params;
+      
+        const course = await Course.findByIdAndDelete(courseId);
+        if (!course) {
             return res.status(400).json({
-                success:false,
-                mesage:"unable to find the course"
+                success: false,
+                mesage: "unable to find the course"
             })
         }
         return res.status(200).json({
-            success:true,
-            message:"course removed successfully"
+            success: true,
+            message: "course removed successfully"
         })
 
     } catch (error) {
         return res.status(500).json({
-            success:false,
-            message:"unable to remove the course",
+            success: false,
+            message: "unable to remove the course",
         })
-        
+
     }
 }
-
-
-
 
 const Getcourselecture = async (req, res) => {
     try {
         const courseId = req.params.courseId;
-        console.log("hii")
+     
+        const fetchedcourselectures = await Course.findById(courseId).populate('Lectures'); 
 
-        const fetchedcourselectures = await Course.findById(courseId).populate('Lectures'); // Matches schema
-
-        console.log("courseId getcourselectures", fetchedcourselectures)
         if (!fetchedcourselectures) {
             return res.status(400).json({
                 success: false,
@@ -354,7 +344,7 @@ const Getcourselecture = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error in fetching all lectures", error);
+     
         return res.status(500).json({
             success: false,
             message: "unable to Error in fetching all  the lectures ",
@@ -380,8 +370,7 @@ const IsPublishedCourse = async (req, res) => {
         })
 
     } catch (error) {
-        console.log("Error in fetching published course", error);
-        return res.status(500).json({
+     return res.status(500).json({
             success: false,
             message: "unable to fetching  the published course ",
         })
@@ -390,8 +379,46 @@ const IsPublishedCourse = async (req, res) => {
 }
 
 
+const Searchedcourses = async (req, res) => {
+
+    try {
+        const { query } = req.query;
+
+        const searchedcourse = await Course.find({
+            isPublished: true,
+            $or: [
+                { CourseTitle: { $regex: query, $options: 'i' } },
+                { Category: { $regex: query, $options: 'i' } },
+                { CourseSubtitle: { $regex: query, $options: 'i' } },
+            ]
+        })
+        if (!searchedcourse) {
+            return res.status(200).json({
+                success: true,
+                message: "no courses are available"
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            message: "courses found successfully",
+            searchedcourse: searchedcourse
+        })
+
+    } catch (error) {
+       
+        return res.status(500).json({
+            success: false,
+            message: "unable to searched the  course ",
+        })
+
+    }
+}
+
+
+
 module.exports = {
     CourseControlller,
+    Searchedcourses,
     RemoveCoursed,
     GetAallCourses,
     Editcourse,

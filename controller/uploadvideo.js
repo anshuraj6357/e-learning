@@ -16,7 +16,7 @@ try {
         uploadedfile: uploadResponse,
           });
     } catch (error) {
-      console.error(error);
+     
       return res.status(500).json({ success: false, message: "Video upload failed" });
     }
   }

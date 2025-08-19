@@ -16,11 +16,10 @@ module.exports = cloudinary;
         const UploadResponce=await  cloudinary.uploader.upload(file,{
             resource_type:'auto',
         })
-       console.log("UploadResponce",UploadResponce)
-        return UploadResponce;
+            return UploadResponce;
         
     } catch (error) {
-        console.log("error in uploading the media",error);
+       
         return res.status(400).json({
                 success: false,
                 message: 'error in uploading the media'
@@ -38,8 +37,7 @@ module.exports = cloudinary;
         return DeleteResponce;
         
     } catch (error) {
-        console.log("error in uploading the media",error);
-        return res.status(400).json({
+      return res.status(400).json({
                 success: false,
                 message: 'error in uploading the media'
             })

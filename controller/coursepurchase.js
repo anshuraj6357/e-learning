@@ -8,13 +8,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 const CreateCheckOut = async (req, res) => {
     try {
-
         const { courseId } = req.body;
         const userId = req.id.id
-
-
-
-
         const course = await Course.findById(courseId);
 
         if (!course) {
@@ -67,7 +62,7 @@ const CreateCheckOut = async (req, res) => {
             status: 'pending',
             paymentid: session.id
         });
-        console.log("status", session)
+     
         await newPurchase.save();
 
         // Send session URL to frontend
@@ -77,7 +72,7 @@ const CreateCheckOut = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Error creating checkout session:", error);
+      
         return res.status(500).json({
             success: false,
             message: "Internal Server Error",
@@ -92,15 +87,12 @@ const stripeWeb = async (req, res) => {
     const sig = req.headers['stripe-signature'];
     const endpointSecret = process.env.WEBHOOK_ENDPOINT_SECRET;
 
-    console.log("🔑 endpointSecret:", endpointSecret);
-    console.log("📩 Stripe signature:", sig);
-
     try {
         event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-        console.log("✅ Verified event type:", event.type);
+      
     } catch (err) {
-        console.error("❌ Webhook signature verification failed:", err.message);
-        return res.status(400).send(`Webhook Error: ${err.message}`);
+        console.error(" Webhook signature verification failed:", err.message);
+  
     }
 
     if (event.type === "checkout.session.completed") {
@@ -112,13 +104,13 @@ const stripeWeb = async (req, res) => {
                 .populate({ path: "courseId" });
 
             if (!purchaseDoc) {
-                console.log(`⚠️ No purchase found for session: ${session.id}`);
+               
                 return res.status(200).send(); 
             }
 
             if (session.amount_total) {
                 purchaseDoc.amount = session.amount_total / 100; 
-                console.log("💰 Purchase amount updated:", purchaseDoc.amount);
+       
             }
 
             purchaseDoc.status = "completed";
@@ -129,7 +121,7 @@ const stripeWeb = async (req, res) => {
                     { _id: { $in: purchaseDoc.courseId.Lectures } },
                     { $set: { isPreview: true } }
                 );
-                console.log("📚 Lectures updated for course:", purchaseDoc.courseId._id);
+             
             }
 
             await Signup.findOneAndUpdate(
@@ -162,7 +154,7 @@ const Fetchedsoursesolddata = async (req, res) => {
 
     try {
 
-        console.log("ticking")
+    
         const userId = req.id.id;
 
         const allpurchasedcourse = await purchase.find({ status: 'completed' }).populate({
@@ -183,9 +175,7 @@ const Fetchedsoursesolddata = async (req, res) => {
                 message: 'Not sold any courses'
             });
         }
-        const updata = allpurchasedcourse.forEach(data => {
-            console.log("Course creator:", data.courseId?.Createdby?._id === userId);
-        });
+       
 
         const foundedalldata = allpurchasedcourse.filter((data) => {
             return (
@@ -193,15 +183,13 @@ const Fetchedsoursesolddata = async (req, res) => {
             );
         });
 
-        console.log("foundeddata:", foundedalldata);
-
+     
         return res.status(200).json({
             success: true,
             allpurchasedcourse: foundedalldata,
         })
     } catch (error) {
-        console.error("Error  in checking the Fetchedsoursesolddata:", error);
-        return res.status(500).json({
+          return res.status(500).json({
             success: false,
             message: "Internal Server Error",
             error: error.message
@@ -229,7 +217,7 @@ const checkcoursestatus = async (req, res) => {
         const checkstatus = await purchase.find({ courseId: courseId, userId: userid });
 
         if (checkstatus[0].status === 'pending' || checkstatus.length === 0) {
-            console.log("hii hii ")
+         
             return res.status(500).json({
                 success: false,
             })
@@ -243,7 +231,7 @@ const checkcoursestatus = async (req, res) => {
 
 
     } catch (error) {
-        console.error("Error  in checking the purchased curse:", error);
+     
         return res.status(500).json({
             success: false,
             message: "Internal Server Error",
@@ -255,8 +243,14 @@ const checkcoursestatus = async (req, res) => {
 module.exports = {
     CreateCheckOut,
     stripeWeb,
-    Getallpurchasedcourse,
+    // Getallpurchasedcourse,
     checkcoursestatus,
     Fetchedsoursesolddata
 };
+
+
+
+
+
+
 

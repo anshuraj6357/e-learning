@@ -6,10 +6,6 @@ const {
     signupcontroller,
     Logincontroller, GetUserProfile,UpdateProfile,Logoutcontroller
 } = require("../controller/user");
-console.log("signupcontroller:", typeof signupcontroller);
-console.log("Logincontroller:", typeof Logincontroller);
-console.log("GetUserProfile:", typeof GetUserProfile);
-
 
 router.post("/register", signupcontroller);
 router.post("/login", Logincontroller)
