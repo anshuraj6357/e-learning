@@ -25,15 +25,18 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://e-learning-student-pwiq-s2tzyhpyb-anshu-rajs-projects-92c5d5d7.vercel.app",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
 
-// cors({
-//   origin: "*  ||      ",
-//   credentials: true,
-// })
+// app.use(
+//   cors({
+//     origin: "https://e-learning-student-pwiq-s2tzyhpyb-anshu-rajs-projects-92c5d5d7.vercel.app",
+//     credentials: true,
+//   })
+// );
+
 
 
 app.use('/api/v1/user', userrouter);
