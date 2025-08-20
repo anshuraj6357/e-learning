@@ -104,7 +104,7 @@ const GetAallCourses = async (req, res) => {
 
 const GetAllpublishedcourse = async (req, res) => {
     try {
-        const allpublishedcourses = await Course.find({ isPublished: true })
+        const allpublishedcourses = await Course.find({ isPublished: true }).populate('Createdby')
         if (!allpublishedcourses) {
             return res.status(400).json({
                 success: false,
@@ -391,13 +391,15 @@ const Searchedcourses = async (req, res) => {
                 { Category: { $regex: query, $options: 'i' } },
                 { CourseSubtitle: { $regex: query, $options: 'i' } },
             ]
-        })
+        }).populate('Createdby')
         if (!searchedcourse) {
             return res.status(200).json({
                 success: true,
                 message: "no courses are available"
             })
         }
+
+
         return res.status(200).json({
             success: true,
             message: "courses found successfully",

@@ -2,7 +2,7 @@ const express = require("express");
 const userrouter = require("./router/user");
 const courserouter = require("./router/course");
 const Uploadrouter = require("./router/media");
-const webhookattach=require('./router/webhookrouter')
+const webhookattach = require('./router/webhookrouter')
 const purchaserouter = require("./router/purchasecourse");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -24,11 +24,15 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://e-learning-student-idxi.vercel.app/",
+    origin: [
+      "http://localhost:5173",
+      "https://e-learning-student-peach.vercel.app",
+      "e-learning-student-git-main-anshu-rajs-projects-92c5d5d7.vercel.app",
+      "e-learning-student-6vgzxvnh5-anshu-rajs-projects-92c5d5d7.vercel.app",
+    ],
     credentials: true,
   })
 );
-
 
 app.use('/api/v1/user', userrouter);
 app.use('/api/v1/uploadmedia', Uploadrouter);
@@ -37,6 +41,9 @@ app.use('/api/v1/coursepurchase', purchaserouter);
 
 
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'OK', message: 'Backend is running!' });
+});
 
 app.get('/', (req, res) => {
   res.send('Server is running!');

@@ -185,9 +185,15 @@ const Logoutcontroller = async (req, res) => {
 
 const GetUserProfile = async (req, res) => {
     try {
-        const userid = req.id.id; // user ID extracted from request (e.g., JWT payload)
+        const userid = req.id.id; 
 
-        const profile = await Signup.findById(userid).populate('enrolledcourses');
+        const profile = await Signup.findById(userid).populate('enrolledcourses').populate({
+            path:'enrolledcourses',
+            populate:{
+                path:'Createdby',
+                select:'username'
+            }
+        });
 
         if (!profile) {
     return res.status(404).json({
