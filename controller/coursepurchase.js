@@ -43,11 +43,9 @@ const CreateCheckOut = async (req, res) => {
 
 
             mode: 'payment',
-<<<<<<< HEAD
-            success_url: `https://e-learning-student-peach.vercel.app/course-progress/${courseId}`,
-=======
+
             success_url: `hhttps://e-learning-student-peach.vercel.app/course-progress/${courseId}`,
->>>>>>> 8e4f21d7f2ba933180194d1bdad7fa524c8e6766
+
             cancel_url: `https://e-learning-student-peach.vercel.app/course-details/${courseId}`,
             metadata: {
                 courseId: courseId,
