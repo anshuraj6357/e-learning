@@ -22,12 +22,20 @@ app.use('/api/v1/coursepurchase', webhookattach);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// app.use(
+//   cors({
+//     origin: "https://e-learning-student-idxi.vercel.app",
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
-    origin: "https://e-learning-student-idxi.vercel.app",
+    origin: "https://e-learning-student-idxi.vercel.app", // frontend URL
     credentials: true,
   })
 );
+
 
 
 app.use('/api/v1/user', userrouter);
