@@ -29,8 +29,8 @@ app.use(
 
       "http://localhost:5173",
       "https://e-learning-student-peach.vercel.app",
-      "e-learning-student-git-main-anshu-rajs-projects-92c5d5d7.vercel.app",
-      "e-learning-student-6vgzxvnh5-anshu-rajs-projects-92c5d5d7.vercel.app",
+      "https://e-learning-student-git-main-anshu-rajs-projects-92c5d5d7.vercel.app",
+      "https://e-learning-student-6vgzxvnh5-anshu-rajs-projects-92c5d5d7.vercel.app",
 
     ],
     credentials: true,
