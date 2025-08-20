@@ -31,7 +31,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://e-learning-student-peach.vercel.app", // frontend URL
+    origin: "https://e-learning-student-peach.vercel.app","http://localhost:5173" // frontend URL
     credentials: true,
   })
 );
