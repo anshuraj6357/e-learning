@@ -24,7 +24,7 @@ app.use(express.json());
 
 // app.use(
 //   cors({
-//     origin: "https://e-learning-student-idxi.vercel.app",
+//     origin: "https://e-learning-student-idxi.vercel.app","http://localhost:5173"
 //     credentials: true,
 //   })
 // );
