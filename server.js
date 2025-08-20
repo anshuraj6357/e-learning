@@ -31,7 +31,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://e-learning-student-idxi.vercel.app", // frontend URL
+    origin: "https://e-learning-student-peach.vercel.app", // frontend URL
     credentials: true,
   })
 );
