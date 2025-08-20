@@ -84,130 +84,6 @@ const CreateCheckOut = async (req, res) => {
 };
 
 
-// const stripeWeb = async (req, res) => {
-//     let event;
-//     const sig = req.headers['stripe-signature'];
-//     const endpointSecret = process.env.WEBHOOK_ENDPOINT_SECRET;
-
-<<<<<<< HEAD
-    try {
-        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-
-    } catch (err) {
-        console.error(" Webhook signature verification failed:", err.message);
-
-    }
-
-    if (event.type === "checkout.session.completed") {
-        const session = event.data.object;
-
-        try {
-            const purchaseDoc = await purchase
-                .findOne({ paymentid: session.id })
-                .populate({ path: "courseId" });
-
-            if (!purchaseDoc) {
-
-                return res.status(200).send();
-            }
-
-            if (session.amount_total) {
-                purchaseDoc.amount = session.amount_total / 100;
-
-            }
-
-            purchaseDoc.status = "completed";
-            await purchaseDoc.save();
-
-            if (purchaseDoc.courseId && purchaseDoc.courseId.Lectures?.length > 0) {
-                await lecture.updateMany(
-                    { _id: { $in: purchaseDoc.courseId.Lectures } },
-                    { $set: { isPreview: true } }
-                );
-
-            }
-
-            await Signup.findOneAndUpdate(
-                { _id: purchaseDoc.userId },
-                { $addToSet: { enrolledcourses: purchaseDoc.courseId } },
-                { new: true }
-            );
-            await Course.findByIdAndUpdate(
-                purchaseDoc.courseId,
-                {
-                    $addToSet: {
-                        enrolledStudents: purchaseDoc.userId,
-                        coursesold: purchaseDoc._id,
-                    },
-                },
-                { new: true }
-            );
-
-        } catch (err) {
-
-            return res.status(500).json({ message: "Internal Server Error" });
-=======
-//     try {
-//         event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-      
-//     } catch (err) {
-//         console.error(" Webhook signature verification failed:", err.message);
-  
-//     }
-
-//     if (event.type === "checkout.session.completed") {
-//         const session = event.data.object;
- 
-//         try {
-//        const purchaseDoc = await purchase
-//                 .findOne({ paymentid: session.id })
-//                 .populate({ path: "courseId" });
-
-//             if (!purchaseDoc) {
-               
-//                 return res.status(200).send(); 
-//             }
-
-//             if (session.amount_total) {
-//                 purchaseDoc.amount = session.amount_total / 100; 
-       
-//             }
-
-//             purchaseDoc.status = "completed";
-//             await purchaseDoc.save();
-           
-//             if (purchaseDoc.courseId && purchaseDoc.courseId.Lectures?.length > 0) {
-//                 await lecture.updateMany(
-//                     { _id: { $in: purchaseDoc.courseId.Lectures } },
-//                     { $set: { isPreview: true } }
-//                 );
-             
-//             }
-
-//             await Signup.findOneAndUpdate(
-//                 { _id: purchaseDoc.userId },
-//                 { $addToSet: { enrolledcourses: purchaseDoc.courseId } },
-//                 { new: true }
-//             );
-//           await Course.findByIdAndUpdate(
-//                 purchaseDoc.courseId,
-//                 {
-//                     $addToSet: {
-//                         enrolledStudents: purchaseDoc.userId,
-//                         coursesold: purchaseDoc._id,
-//                     },
-//                 },
-//                 { new: true }
-//             );
-        
-//         } catch (err) {
-         
-//             return res.status(500).json({ message: "Internal Server Error" });
-//         }
-//     }
-
-//     return res.status(200).json({ received: true });
-// };
 
 const stripeWeb = async (req, res) => {
   let event;
@@ -233,7 +109,7 @@ const stripeWeb = async (req, res) => {
 
         if (session.amount_total) {
           purchaseDoc.amount = session.amount_total / 100;
->>>>>>> 8e4f21d7f2ba933180194d1bdad7fa524c8e6766
+
         }
 
         purchaseDoc.status = "completed";
