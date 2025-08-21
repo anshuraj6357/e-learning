@@ -159,8 +159,8 @@ const Logoutcontroller = async (req, res) => {
    
         res.clearCookie('babbarCookie', {
             httpOnly: true,
-            sameSite: 'strict',
-            path: '/', // if used during set
+            sameSite: 'none',
+            path: '/', 
         });
 
 
