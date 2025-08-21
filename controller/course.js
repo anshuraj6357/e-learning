@@ -200,7 +200,7 @@ const PublishStateHandler = async (req, res) => {
         const { publish } = req.query;
 
         const foundcourse = await Course.findById(courseId);
-        if (publish === "true") {
+        if (publish === true) {
             foundcourse.isPublished = true;
         }
         else {
